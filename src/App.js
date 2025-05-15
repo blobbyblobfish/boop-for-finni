@@ -1,7 +1,7 @@
 import './App.css';
 import { useEffect, useState } from 'react'
 import { Auth } from './components/auth.js'
-import { PatientTable } from './components/table.js'
+import { PatientsTableWithProviders } from './components/table.js'
 import { db } from './firebase-config.js'
 import { getDocs, collection } from 'firebase/firestore'
 
@@ -31,7 +31,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Auth />
-        <PatientTable patients={patientList}/>
+        <PatientsTableWithProviders patients={patientList}/>
       </header>
     </div>
   );
