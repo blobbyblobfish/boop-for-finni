@@ -1,22 +1,21 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import { ActionIcon, Button, Flex, Text, Tooltip, Modal } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
 import { useCreatePatient, useGetPatients, useUpdatePatients, useDeletePatient } from '../helpers/hooks'
 import { validateRequired, validatePatient } from '../helpers/validation'
-import { db } from '../firebase-config.js'
-import { getDocs, collection } from 'firebase/firestore'
-
 
 export const PatientsTable = () => {
+  
+  // declare state and query variables
   const [validationErrors, setValidationErrors] = useState({})
+
   const [editedPatients, setEditedPatients] = useState({})
 
-  //what is this syntax:
   const { mutateAsync: createPatient, isLoading: isCreatingPatient } = useCreatePatient()
 
   const {
-    data: patients,
+    data: patients = [],
     isError: isLoadingPatientsError,
     isFetching: isFetchingPatients,
     isLoading: isLoadingPatients,

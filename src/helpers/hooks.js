@@ -4,30 +4,25 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { db } from '../firebase-config.js'
-import { getDocs, collection } from 'firebase/firestore'
+import { getDocs, addDoc, collection } from 'firebase/firestore'
 
 const patientsCollectionRef = collection(db, "patients")
 
+const addPatient = async (newPatient) => {
+    const docRef = await addDoc(collection(db, 'patients'), newPatient)
+    return docRef.id
+}
 
 export function useCreatePatient() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (Patient) => {
-      //send api update request here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-      return Promise.resolve();
-    },
-    //client side optimistic update
-    onMutate: (newPatientInfo) => {
+    mutationFn: addPatient,
+    onMutate: (newPatientInfo) => { //client side optimistic update
       queryClient.setQueryData(['Patients'], (prevPatients) => [
-        ...prevPatients,
-        {
-          ...newPatientInfo,
-          id: (Math.random() + 1).toString(36).substring(7),
-        },
+        ...prevPatients, { ...newPatientInfo },
       ]);
     },
-    // onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }), //refetch Patients after mutation, disabled for demo
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }), //refetch Patients after mutation
   });
 }
 
@@ -44,14 +39,15 @@ export function useGetPatients() {
   });
 }
 
+const updatePatients = async () => {
+    // const patientData = await getDocs(patientsCollectionRef)
+    // return patientData.docs.map((doc) => ({...doc.data(), id: doc.id}))
+}
+
 export function useUpdatePatients() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (Patients) => {
-      //send api update request here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-      return Promise.resolve();
-    },
+    mutationFn: updatePatients,
     //client side optimistic update
     onMutate: (newPatients) => {
       queryClient.setQueryData(['Patients'], (prevPatients) =>
@@ -61,18 +57,19 @@ export function useUpdatePatients() {
         }),
       );
     },
-    // onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }), //refetch Patients after mutation, disabled for demo
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }), //refetch Patients after mutation, disabled for demo
   });
+}
+
+const deletePatients = async () => {
+    // const patientData = await getDocs(patientsCollectionRef)
+    // return patientData.docs.map((doc) => ({...doc.data(), id: doc.id}))
 }
 
 export function useDeletePatient() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (PatientId) => {
-      //send api update request here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-      return Promise.resolve();
-    },
+    mutationFn: deletePatients,
     //client side optimistic update
     onMutate: (PatientId) => {
       queryClient.setQueryData(['Patients'], (prevPatients) =>
