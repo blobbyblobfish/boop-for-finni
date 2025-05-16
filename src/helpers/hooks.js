@@ -3,6 +3,11 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import { db } from '../firebase-config.js'
+import { getDocs, collection } from 'firebase/firestore'
+
+const patientsCollectionRef = collection(db, "patients")
+
 
 export function useCreatePatient() {
   const queryClient = useQueryClient();
@@ -26,14 +31,15 @@ export function useCreatePatient() {
   });
 }
 
+const fetchPatients = async () => {
+    const patientData = await getDocs(patientsCollectionRef)
+    return patientData.docs.map((doc) => ({...doc.data(), id: doc.id}))
+}
+
 export function useGetPatients() {
   return useQuery({
     queryKey: ['Patients'],
-    queryFn: async () => {
-      //send api request here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-    //   return Promise.resolve();
-    },
+    queryFn: fetchPatients,
     refetchOnWindowFocus: false,
   });
 }

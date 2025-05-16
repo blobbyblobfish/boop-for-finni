@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
-import { MantineReactTable, useMantineReactTable, createRow } from 'mantine-react-table';
+import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import { ActionIcon, Button, Flex, Text, Tooltip, Modal } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
 import { useCreatePatient, useGetPatients, useUpdatePatients, useDeletePatient } from '../helpers/hooks'
@@ -10,32 +10,13 @@ import { getDocs, collection } from 'firebase/firestore'
 
 export const PatientsTable = () => {
   const [validationErrors, setValidationErrors] = useState({})
-  const [patientsList, setPatientsList] = useState([])
   const [editedPatients, setEditedPatients] = useState({})
-  const patientsCollectionRef = collection(db, "patients")
-
-
-  useEffect(() => {
-    const getPatientsList = async () => {
-    try {
-        const patientData = await getDocs(patientsCollectionRef)
-
-        const filteredPatientData = patientData.docs.map((doc) => ({...doc.data(), id: doc.id}))
-
-        setPatientsList(filteredPatientData)
-    } catch (error) {
-        // handle error
-    }
-    }
-
-    getPatientsList()
-  }, [])
 
   //what is this syntax:
   const { mutateAsync: createPatient, isLoading: isCreatingPatient } = useCreatePatient()
 
   const {
-    // data: patientsList,
+    data: patients,
     isError: isLoadingPatientsError,
     isFetching: isFetchingPatients,
     isLoading: isLoadingPatients,
@@ -216,7 +197,7 @@ export const PatientsTable = () => {
 
   const table = useMantineReactTable({
     columns,
-    data: patientsList,
+    data: patients,
     createDisplayMode: 'row', 
     editDisplayMode: 'cell',
     enableEditing: true,
