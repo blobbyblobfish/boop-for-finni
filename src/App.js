@@ -1,8 +1,6 @@
 import './App.css';
 import { Auth } from './components/auth.js'
 import { PatientsTable } from './components/table.js'
-// import { db } from './firebase-config.js'
-// import { getDocs, collection } from 'firebase/firestore'
 import {
   QueryClient,
   QueryClientProvider,
@@ -17,8 +15,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div className="App">
         <header className="App-header">
+          <h1>Finni Database</h1>
           <Auth />
-          <PatientsTable />
+          <div style={{overflowX: "auto", maxWidth: "95%", textAlign: "left"}}>
+            <PatientsTable />
+          </div>
         </header>
       </div>
     </QueryClientProvider>

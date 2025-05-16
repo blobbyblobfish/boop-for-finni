@@ -10,7 +10,7 @@ import { getDocs, collection } from 'firebase/firestore'
 
 export const PatientsTable = () => {
   const [validationErrors, setValidationErrors] = useState({})
-  const [patientList, setPatientList] = useState([])
+  const [patientsList, setPatientsList] = useState([])
   const [editedPatients, setEditedPatients] = useState({})
   const patientsCollectionRef = collection(db, "patients")
 
@@ -22,7 +22,7 @@ export const PatientsTable = () => {
 
         const filteredPatientData = patientData.docs.map((doc) => ({...doc.data(), id: doc.id}))
 
-        setPatientList(filteredPatientData)
+        setPatientsList(filteredPatientData)
     } catch (error) {
         // handle error
     }
@@ -35,7 +35,7 @@ export const PatientsTable = () => {
   const { mutateAsync: createPatient, isLoading: isCreatingPatient } = useCreatePatient()
 
   const {
-    data: fetchedPatients = [],
+    // data: patientsList,
     isError: isLoadingPatientsError,
     isFetching: isFetchingPatients,
     isLoading: isLoadingPatients,
@@ -82,7 +82,7 @@ export const PatientsTable = () => {
     () => [
       {
         accessorKey: 'id',
-        header: 'Id',
+        header: 'PID',
         enableEditing: false,
         size: 80,
       },
@@ -90,10 +90,26 @@ export const PatientsTable = () => {
         accessorKey: 'firstName',
         header: 'First Name',
         mantineEditTextInputProps: ({ cell, row }) => ({
-          type: 'email',
           required: true,
           error: validationErrors?.[cell.id],
-          //store edited Patient in state to be saved later
+          onBlur: (event) => {
+            const validationError = !validateRequired(event.currentTarget.value)
+              ? 'Required'
+              : undefined;
+            setValidationErrors({
+              ...validationErrors,
+              [cell.id]: validationError,
+            });
+            setEditedPatients({ ...editedPatients, [row.id]: row.original });
+          },
+        }),
+      },
+      {
+        accessorKey: 'middleName',
+        header: 'Middle Name',
+        mantineEditTextInputProps: ({ cell, row }) => ({
+          required: true,
+          error: validationErrors?.[cell.id],
           onBlur: (event) => {
             const validationError = !validateRequired(event.currentTarget.value)
               ? 'Required'
@@ -110,10 +126,8 @@ export const PatientsTable = () => {
         accessorKey: 'lastName',
         header: 'Last Name',
         mantineEditTextInputProps: ({ cell, row }) => ({
-          type: 'email',
           required: true,
           error: validationErrors?.[cell.id],
-          //store edited Patient in state to be saved later
           onBlur: (event) => {
             const validationError = !validateRequired(event.currentTarget.value)
               ? 'Required'
@@ -127,26 +141,82 @@ export const PatientsTable = () => {
         }),
       },
       {
-        accessorKey: 'state',
-        header: 'State',
-        editVariant: 'select',
-        mantineEditSelectProps: ({ row }) => ({
-          data: patientList,
-          //store edited Patient in state to be saved later
-          onChange: (value) =>
-            setEditedPatients({
-              ...editedPatients,
-              [row.id]: { ...row.original, state: value },
-            }),
+        accessorKey: 'dob',
+        header: 'Date of Birth',
+        mantineEditTextInputProps: ({ cell, row }) => ({
+          required: true,
+          error: validationErrors?.[cell.id],
+          onBlur: (event) => {
+            const validationError = !validateRequired(event.currentTarget.value)
+              ? 'Required'
+              : undefined;
+            setValidationErrors({
+              ...validationErrors,
+              [cell.id]: validationError,
+            });
+            setEditedPatients({ ...editedPatients, [row.id]: row.original });
+          },
         }),
       },
+      {
+        accessorKey: 'address',
+        header: 'Address',
+        mantineEditTextInputProps: ({ cell, row }) => ({
+          required: true,
+          error: validationErrors?.[cell.id],
+          onBlur: (event) => {
+            const validationError = !validateRequired(event.currentTarget.value)
+              ? 'Required'
+              : undefined;
+            setValidationErrors({
+              ...validationErrors,
+              [cell.id]: validationError,
+            });
+            setEditedPatients({ ...editedPatients, [row.id]: row.original });
+          },
+        }),
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        mantineEditTextInputProps: ({ cell, row }) => ({
+          required: true,
+          error: validationErrors?.[cell.id],
+          onBlur: (event) => {
+            const validationError = !validateRequired(event.currentTarget.value)
+              ? 'Required'
+              : undefined;
+            setValidationErrors({
+              ...validationErrors,
+              [cell.id]: validationError,
+            });
+            setEditedPatients({ ...editedPatients, [row.id]: row.original });
+          },
+        }),
+      },
+      
+    //   // Your error is here. If you comment out lines 130-143, your error is gone. The issue is within the mantineEditSelectedProps. I tried printing your rows
+    //   {
+    //     accessorKey: 'state',
+    //     header: 'State',
+    //     editVariant: 'select',
+    //     mantineEditSelectProps: ({ row }) => ({
+    //       data: patientList,
+    //       //store edited Patient in state to be saved later
+    //       onChange: (value) =>
+    //         setEditedPatients({
+    //           ...editedPatients,
+    //           [row.id]: { ...row.original, state: value },
+    //         }),
+    //     }),
+    //   },
     ],
     [editedPatients, validationErrors],
   );
 
   const table = useMantineReactTable({
     columns,
-    data: fetchedPatients,
+    data: patientsList,
     createDisplayMode: 'row', 
     editDisplayMode: 'cell',
     enableEditing: true,
@@ -174,7 +244,7 @@ export const PatientsTable = () => {
       </Tooltip>
     ),
     renderBottomToolbarCustomActions: () => (
-      <Flex align="center" gap="md">
+      <Flex align="left" gap="md">
         <Button
           color="blue"
           onClick={handleSavePatients}
@@ -194,7 +264,7 @@ export const PatientsTable = () => {
     renderTopToolbarCustomActions: ({ table }) => (
       <Button
         onClick={() => {
-          table.setCreatingRow(true || false)
+          table.setCreatingRow(true)
         }}>
         Create New Patient
       </Button>
