@@ -59,6 +59,14 @@ export const PatientsTable = () => {
     })
 
 // CREATE THE TABLE
+
+  const statuses = [
+    {label: 'Inquiry', value: "Inquiry"},
+    {label: 'Active', value: "Active"},
+    {label: 'Onboarding', value: "Onboarding"},
+    {label: 'Churned', value: "Churned"},
+  ]
+
   const columns = useMemo(
     () => [
       {
@@ -76,15 +84,15 @@ export const PatientsTable = () => {
           onBlur: (event) => {
             const validationError = !validateRequired(event.currentTarget.value)
               ? 'Required'
-              : undefined;
+              : undefined
             setValidationErrors({
               ...validationErrors,
               [cell.id]: validationError,
-            });
+            })
             setEditedPatients({ ...editedPatients, [row.id]: {
                 ...row.original, firstName: event.currentTarget.value
                 } 
-            });
+            })
           },
         }),
       },
@@ -102,7 +110,9 @@ export const PatientsTable = () => {
               ...validationErrors,
               [cell.id]: validationError,
             });
-            setEditedPatients({ ...editedPatients, [row.id]: row.original });
+            setEditedPatients({ ...editedPatients, [row.id]: {
+                ...row.original, middleName: event.currentTarget.value
+            }})
           },
         }),
       },
@@ -120,7 +130,9 @@ export const PatientsTable = () => {
               ...validationErrors,
               [cell.id]: validationError,
             });
-            setEditedPatients({ ...editedPatients, [row.id]: row.original });
+            setEditedPatients({ ...editedPatients, [row.id]: {
+                ...row.original, lastName: event.currentTarget.value
+            }})
           },
         }),
       },
@@ -128,6 +140,8 @@ export const PatientsTable = () => {
         accessorKey: 'dob',
         header: 'Date of Birth',
         mantineEditTextInputProps: ({ cell, row }) => ({
+          type: 'date', 
+          max: new Date().toISOString().split('T')[0],
           required: true,
           error: validationErrors?.[cell.id],
           onBlur: (event) => {
@@ -138,7 +152,9 @@ export const PatientsTable = () => {
               ...validationErrors,
               [cell.id]: validationError,
             });
-            setEditedPatients({ ...editedPatients, [row.id]: row.original });
+            setEditedPatients({ ...editedPatients, [row.id]: {
+                ...row.original, dob: event.currentTarget.value
+            }})
           },
         }),
       },
@@ -156,25 +172,32 @@ export const PatientsTable = () => {
               ...validationErrors,
               [cell.id]: validationError,
             });
-            setEditedPatients({ ...editedPatients, [row.id]: row.original });
+            setEditedPatients({ ...editedPatients, [row.id]: {
+                ...row.original, address: event.currentTarget.value
+            }})
           },
         }),
       },
       {
         accessorKey: 'status',
         header: 'Status',
-        mantineEditTextInputProps: ({ cell, row }) => ({
+        editVariant: 'select',
+        mantineEditSelectProps: ({ cell, row }) => ({
+          data: statuses,
+          placeholder: "status",
           required: true,
           error: validationErrors?.[cell.id],
-          onBlur: (event) => {
-            const validationError = !validateRequired(event.currentTarget.value)
+          onChange: (event) => {
+            const validationError = !validateRequired(event)
               ? 'Required'
               : undefined;
             setValidationErrors({
               ...validationErrors,
               [cell.id]: validationError,
             });
-            setEditedPatients({ ...editedPatients, [row.id]: row.original });
+            setEditedPatients({ ...editedPatients, [row.id]: {
+                ...row.original, status: event
+            }})
           },
         }),
       },
@@ -224,9 +247,6 @@ export const PatientsTable = () => {
         >
           Save
         </Button>
-        {Object.values(validationErrors).some((error) => !!error) && (
-          <Text color="red">Fix errors before submitting</Text>
-        )}
       </Flex>
     ),
     renderTopToolbarCustomActions: ({ table }) => (
