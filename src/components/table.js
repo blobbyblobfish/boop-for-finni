@@ -80,7 +80,10 @@ export const PatientsTable = () => {
               ...validationErrors,
               [cell.id]: validationError,
             });
-            setEditedPatients({ ...editedPatients, [row.id]: row.original });
+            setEditedPatients({ ...editedPatients, [row.id]: {
+                ...row.original, firstName: event.currentTarget.value
+                } 
+            });
           },
         }),
       },
@@ -174,22 +177,6 @@ export const PatientsTable = () => {
           },
         }),
       },
-      
-    //   // Your error is here. If you comment out lines 130-143, your error is gone. The issue is within the mantineEditSelectedProps. I tried printing your rows
-    //   {
-    //     accessorKey: 'state',
-    //     header: 'State',
-    //     editVariant: 'select',
-    //     mantineEditSelectProps: ({ row }) => ({
-    //       data: patientList,
-    //       //store edited Patient in state to be saved later
-    //       onChange: (value) =>
-    //         setEditedPatients({
-    //           ...editedPatients,
-    //           [row.id]: { ...row.original, state: value },
-    //         }),
-    //     }),
-    //   },
     ],
     [editedPatients, validationErrors],
   );

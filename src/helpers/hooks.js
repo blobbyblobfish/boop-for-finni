@@ -4,10 +4,12 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { db } from '../firebase-config.js'
-import { getDocs, addDoc, collection } from 'firebase/firestore'
+import { doc } from 'firebase/firestore'
+import { getDocs, addDoc, writeBatch, collection } from 'firebase/firestore'
 
 const patientsCollectionRef = collection(db, "patients")
 
+// CREATE
 const addPatient = async (newPatient) => {
     const docRef = await addDoc(collection(db, 'patients'), newPatient)
     return docRef.id
@@ -26,6 +28,7 @@ export function useCreatePatient() {
   });
 }
 
+// READ
 const fetchPatients = async () => {
     const patientData = await getDocs(patientsCollectionRef)
     return patientData.docs.map((doc) => ({...doc.data(), id: doc.id}))
@@ -39,17 +42,24 @@ export function useGetPatients() {
   });
 }
 
-const updatePatients = async () => {
-    // const patientData = await getDocs(patientsCollectionRef)
-    // return patientData.docs.map((doc) => ({...doc.data(), id: doc.id}))
+
+// UPDATE
+const updatePatients = async (patientsToUpdate) => {
+    const batch = writeBatch(db)
+    
+    patientsToUpdate?.forEach((patient) => {
+        const docRef = doc(db, 'patients', patient.id)
+        batch.update(docRef, patient)
+    })
+
+    await batch.commit()
 }
 
 export function useUpdatePatients() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: updatePatients,
-    //client side optimistic update
-    onMutate: (newPatients) => {
+    onMutate: (newPatients) => { //client side optimistic update
       queryClient.setQueryData(['Patients'], (prevPatients) =>
         prevPatients?.map((Patient) => {
           const newPatient = newPatients.find((u) => u.id === Patient.id);
@@ -57,10 +67,14 @@ export function useUpdatePatients() {
         }),
       );
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }), //refetch Patients after mutation, disabled for demo
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }),
+    onError: () => {
+        console.log("ERROR UPDATING PATIENTS")
+    }
   });
 }
 
+// DELETE
 const deletePatients = async () => {
     // const patientData = await getDocs(patientsCollectionRef)
     // return patientData.docs.map((doc) => ({...doc.data(), id: doc.id}))
