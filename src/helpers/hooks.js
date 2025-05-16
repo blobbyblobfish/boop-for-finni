@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-query';
 import { db } from '../firebase-config.js'
 import { doc } from 'firebase/firestore'
-import { getDocs, addDoc, writeBatch, collection } from 'firebase/firestore'
+import { getDocs, addDoc, deleteDoc, writeBatch, collection } from 'firebase/firestore'
 
 const patientsCollectionRef = collection(db, "patients")
 
@@ -59,7 +59,7 @@ export function useUpdatePatients() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: updatePatients,
-    onMutate: (newPatients) => { //client side optimistic update
+    onMutate: (newPatients) => { 
       queryClient.setQueryData(['Patients'], (prevPatients) =>
         prevPatients?.map((Patient) => {
           const newPatient = newPatients.find((u) => u.id === Patient.id);
@@ -75,21 +75,20 @@ export function useUpdatePatients() {
 }
 
 // DELETE
-const deletePatients = async () => {
-    // const patientData = await getDocs(patientsCollectionRef)
-    // return patientData.docs.map((doc) => ({...doc.data(), id: doc.id}))
+const deletePatient = async (patient) => {
+    const docRef = doc(db, 'patients', patient.id)
+    await deleteDoc(docRef)
 }
 
 export function useDeletePatient() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: deletePatients,
-    //client side optimistic update
+    mutationFn: deletePatient,
     onMutate: (PatientId) => {
       queryClient.setQueryData(['Patients'], (prevPatients) =>
         prevPatients?.filter((Patient) => Patient.id !== PatientId),
       );
     },
-    // onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }), //refetch Patients after mutation, disabled for demo
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }), 
   });
 }

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import { ActionIcon, Button, Flex, Text, Tooltip, Modal } from '@mantine/core';
+import { modals } from '@mantine/modals'
 import { IconTrash } from '@tabler/icons-react';
 import { useCreatePatient, useGetPatients, useUpdatePatients, useDeletePatient } from '../helpers/hooks'
 import { validateRequired, validatePatient } from '../helpers/validation'
@@ -19,43 +20,43 @@ export const PatientsTable = () => {
     isError: isLoadingPatientsError,
     isFetching: isFetchingPatients,
     isLoading: isLoadingPatients,
-  } = useGetPatients();
+  } = useGetPatients()
 
-  const { mutateAsync: updatePatients, isLoading: isUpdatingPatient } = useUpdatePatients();
+  const { mutateAsync: updatePatients, isLoading: isUpdatingPatient } = useUpdatePatients()
 
-  const { mutateAsync: deletePatient, isLoading: isDeletingPatient } = useDeletePatient();
+  const { mutateAsync: deletePatient, isLoading: isDeletingPatient } = useDeletePatient()
 
   //handlers:
   const handleCreatePatient = async ({ values, exitCreatingMode }) => {
-    const newValidationErrors = validatePatient(values);
+    const newValidationErrors = validatePatient(values)
     if (Object.values(newValidationErrors).some((error) => !!error)) {
-      setValidationErrors(newValidationErrors);
+      setValidationErrors(newValidationErrors)
       return;
     }
     setValidationErrors({});
     await createPatient(values);
     exitCreatingMode();
-  };
+  }
 
   const handleSavePatients = async () => {
     if (Object.values(validationErrors).some((error) => !!error)) return;
     await updatePatients(Object.values(editedPatients));
     setEditedPatients({});
-  };
+  }
 
-//   const openDeleteConfirmModal = (row) =>
-//     // modals.openConfirmModal({
-//     //   title: 'Are you sure you want to delete this Patient?',
-//     //   children: (
-//     //     <Text>
-//     //       Are you sure you want to delete {row.original.firstName}{' '}
-//     //       {row.original.lastName}? This action cannot be undone.
-//     //     </Text>
-//     //   ),
-//     //   labels: { confirm: 'Delete', cancel: 'Cancel' },
-//     //   confirmProps: { color: 'red' },
-//     //   onConfirm: () => deletePatient(row.original.id),
-//     });
+  const openDeleteConfirmModal = (row) =>
+    modals.openConfirmModal({
+      title: 'Are you sure you want to delete this Patient?',
+      children: (
+        <Text>
+          Are you sure you want to delete {row.original.firstName}{' '}
+          {row.original.lastName}? This action cannot be undone.
+        </Text>
+      ),
+      labels: { confirm: 'Delete', cancel: 'Cancel' },
+      confirmProps: { color: 'red' },
+      onConfirm: () => deletePatient(row.original),
+    })
 
 // CREATE THE TABLE
   const columns = useMemo(
@@ -205,7 +206,7 @@ export const PatientsTable = () => {
     onCreatingRowSave: handleCreatePatient,
     renderRowActions: ({ row }) => (
       <Tooltip label="Delete">
-        <ActionIcon color="red">
+        <ActionIcon color="red" onClick={() => openDeleteConfirmModal(row)}>
           <IconTrash />
         </ActionIcon>
       </Tooltip>

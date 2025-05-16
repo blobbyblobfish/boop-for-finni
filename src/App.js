@@ -5,6 +5,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
+import { ModalsProvider } from '@mantine/modals'
 
 
 const queryClient = new QueryClient()
@@ -13,15 +14,17 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="App">
-        <header className="App-header">
-          <h1>Finni Database</h1>
-          <Auth />
-          <div style={{overflowX: "auto", maxWidth: "95%", textAlign: "left"}}>
-            <PatientsTable />
-          </div>
-        </header>
-      </div>
+      <ModalsProvider>
+        <div className="App">
+          <header className="App-header">
+            <h1>Finni Database</h1>
+            <Auth />
+            <div style={{overflowX: "auto", maxWidth: "95%", textAlign: "left"}}>
+              <PatientsTable />
+            </div>
+          </header>
+        </div>
+      </ModalsProvider>
     </QueryClientProvider>
   )
 }
