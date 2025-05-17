@@ -3,13 +3,13 @@ import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import { ActionIcon, Button, Flex, Text, Tooltip, Modal } from '@mantine/core';
 import { modals } from '@mantine/modals'
 import { IconTrash } from '@tabler/icons-react';
-import { useCreatePatient, useGetPatients, useUpdatePatients, useDeletePatient } from '../helpers/hooks'
-import { validateRequired, validatePatient } from '../helpers/validation'
+import { useCreatePatient, useGetPatients, useUpdatePatients, useDeletePatient } from '../lib/hooks'
+import { validateRequired, validatePatient } from '../lib/validation'
 
 export const PatientsTable = () => {
   
   // declare state and query variables
-  const [validationErrors, setValidationErrors] = useState({})
+  const [validationErrors, setValidationErrors] = useState([])
 
   const [editedPatients, setEditedPatients] = useState({})
 
@@ -29,8 +29,10 @@ export const PatientsTable = () => {
   //handlers:
   const handleCreatePatient = async ({ values, exitCreatingMode }) => {
     const newValidationErrors = validatePatient(values)
+
     if (Object.values(newValidationErrors).some((error) => !!error)) {
       setValidationErrors(newValidationErrors)
+
       return;
     }
     setValidationErrors({});
@@ -79,14 +81,14 @@ export const PatientsTable = () => {
         header: 'First Name',
         mantineEditTextInputProps: ({ cell, row }) => ({
           required: true,
-          error: validationErrors?.[cell.id],
+          error: validationErrors?.firstName,
           onBlur: (event) => {
             const validationError = !validateRequired(event.currentTarget.value)
               ? 'Required'
               : undefined
             setValidationErrors({
               ...validationErrors,
-              [cell.id]: validationError,
+              firstName: validationError,
             })
             setEditedPatients({ ...editedPatients, [row.id]: {
                 ...row.original, firstName: event.currentTarget.value
@@ -99,16 +101,7 @@ export const PatientsTable = () => {
         accessorKey: 'middleName',
         header: 'Middle Name',
         mantineEditTextInputProps: ({ cell, row }) => ({
-          required: true,
-          error: validationErrors?.[cell.id],
           onBlur: (event) => {
-            const validationError = !validateRequired(event.currentTarget.value)
-              ? 'Required'
-              : undefined;
-            setValidationErrors({
-              ...validationErrors,
-              [cell.id]: validationError,
-            });
             setEditedPatients({ ...editedPatients, [row.id]: {
                 ...row.original, middleName: event.currentTarget.value
             }})
@@ -120,15 +113,15 @@ export const PatientsTable = () => {
         header: 'Last Name',
         mantineEditTextInputProps: ({ cell, row }) => ({
           required: true,
-          error: validationErrors?.[cell.id],
+          error: validationErrors?.lastName,
           onBlur: (event) => {
             const validationError = !validateRequired(event.currentTarget.value)
-              ? 'Required'
-              : undefined;
-            setValidationErrors({
-              ...validationErrors,
-              [cell.id]: validationError,
-            });
+              ? 'Last Name is required'
+              : undefined
+              setValidationErrors({
+                ...validationErrors,
+                lastName: validationError,
+              }) 
             setEditedPatients({ ...editedPatients, [row.id]: {
                 ...row.original, lastName: event.currentTarget.value
             }})
@@ -142,14 +135,14 @@ export const PatientsTable = () => {
           type: 'date', 
           max: new Date().toISOString().split('T')[0],
           required: true,
-          error: validationErrors?.[cell.id],
+          error: validationErrors?.dob,
           onBlur: (event) => {
             const validationError = !validateRequired(event.currentTarget.value)
               ? 'Required'
               : undefined;
             setValidationErrors({
               ...validationErrors,
-              [cell.id]: validationError,
+              dob: validationError,
             });
             setEditedPatients({ ...editedPatients, [row.id]: {
                 ...row.original, dob: event.currentTarget.value
@@ -161,16 +154,7 @@ export const PatientsTable = () => {
         accessorKey: 'address',
         header: 'Address',
         mantineEditTextInputProps: ({ cell, row }) => ({
-          required: true,
-          error: validationErrors?.[cell.id],
           onBlur: (event) => {
-            const validationError = !validateRequired(event.currentTarget.value)
-              ? 'Required'
-              : undefined;
-            setValidationErrors({
-              ...validationErrors,
-              [cell.id]: validationError,
-            });
             setEditedPatients({ ...editedPatients, [row.id]: {
                 ...row.original, address: event.currentTarget.value
             }})
@@ -185,14 +169,14 @@ export const PatientsTable = () => {
           data: statuses,
           placeholder: "status",
           required: true,
-          error: validationErrors?.[cell.id],
+          error: validationErrors?.status,
           onChange: (event) => {
             const validationError = !validateRequired(event)
               ? 'Required'
               : undefined;
             setValidationErrors({
               ...validationErrors,
-              [cell.id]: validationError,
+              status: validationError,
             });
             setEditedPatients({ ...editedPatients, [row.id]: {
                 ...row.original, status: event
@@ -237,12 +221,6 @@ export const PatientsTable = () => {
         },
       }
     },
-    mantineToolbarAlertBannerProps: isLoadingPatientsError
-      ? {
-          color: 'red',
-          children: 'Error loading data',
-        }
-      : undefined,
     mantineTableContainerProps: {
       sx: {
         overflowX: 'auto',

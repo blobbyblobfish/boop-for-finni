@@ -25,6 +25,7 @@ export function useCreatePatient() {
       ]);
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }), //refetch Patients after mutation
+    // onError: 
   });
 }
 
@@ -90,5 +91,6 @@ export function useDeletePatient() {
       );
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }), 
+    // onError: 
   });
 }
