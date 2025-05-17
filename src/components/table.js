@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react';
-import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
-import { ActionIcon, Button, Flex, Text, Tooltip, Modal } from '@mantine/core';
+import { useMemo, useState } from 'react'
+import { MantineReactTable, useMantineReactTable } from 'mantine-react-table'
+import { ActionIcon, Button, Flex, Text, Tooltip, Modal } from '@mantine/core'
 import { modals } from '@mantine/modals'
-import { IconTrash } from '@tabler/icons-react';
+import { IconTrash } from '@tabler/icons-react'
 import { useCreatePatient, useGetPatients, useUpdatePatients, useDeletePatient } from '../lib/hooks'
 import { validateRequired, validatePatient } from '../lib/validation'
 
@@ -33,17 +33,17 @@ export const PatientsTable = () => {
     if (Object.values(newValidationErrors).some((error) => !!error)) {
       setValidationErrors(newValidationErrors)
 
-      return;
+      return
     }
-    setValidationErrors({});
-    await createPatient(values);
-    exitCreatingMode();
+    setValidationErrors({})
+    await createPatient(values)
+    exitCreatingMode()
   }
 
   const handleSavePatients = async () => {
-    if (Object.values(validationErrors).some((error) => !!error)) return;
-    await updatePatients(Object.values(editedPatients));
-    setEditedPatients({});
+    if (Object.values(validationErrors).some((error) => !!error)) return
+    await updatePatients(Object.values(editedPatients))
+    setEditedPatients({})
   }
 
   const openDeleteConfirmModal = (row) =>
@@ -139,11 +139,11 @@ export const PatientsTable = () => {
           onBlur: (event) => {
             const validationError = !validateRequired(event.currentTarget.value)
               ? 'Required'
-              : undefined;
+              : undefined
             setValidationErrors({
               ...validationErrors,
               dob: validationError,
-            });
+            })
             setEditedPatients({ ...editedPatients, [row.id]: {
                 ...row.original, dob: event.currentTarget.value
             }})
@@ -173,11 +173,11 @@ export const PatientsTable = () => {
           onChange: (event) => {
             const validationError = !validateRequired(event)
               ? 'Required'
-              : undefined;
+              : undefined
             setValidationErrors({
               ...validationErrors,
               status: validationError,
-            });
+            })
             setEditedPatients({ ...editedPatients, [row.id]: {
                 ...row.original, status: event
             }})
@@ -186,7 +186,7 @@ export const PatientsTable = () => {
       },
     ],
     [editedPatients, validationErrors],
-  );
+  )
 
   const table = useMantineReactTable({
     columns,
@@ -274,8 +274,8 @@ export const PatientsTable = () => {
       showAlertBanner: isLoadingPatientsError,
       showProgressBars: isFetchingPatients,
     },
-  });
+  })
 
-  return <MantineReactTable table={table} />;
-};
+  return <MantineReactTable table={table} />
+}
 
