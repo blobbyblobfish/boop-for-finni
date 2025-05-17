@@ -212,7 +212,16 @@ export const PatientsTable = () => {
     enableEditing: true,
     enableRowActions: true,
     positionActionsColumn: 'last',
+    enableStickyHeader: true,
     getRowId: (row) => row.id,
+    mantineTableHeadCellProps: {
+      sx: {
+        position: 'sticky',
+        top: 0,
+        zIndex: 1000,
+        backgroundColor: 'white',
+      },
+    },
     mantineTableBodyCellProps: ({ row, column }) => {
       const rowId = row?.id
       const columnId = column?.id
@@ -236,8 +245,8 @@ export const PatientsTable = () => {
       : undefined,
     mantineTableContainerProps: {
       sx: {
-        overflowX: 'scroll',
-        overflowY: 'scroll',
+        overflowX: 'auto',
+        overflowY: 'auto',
         minHeight: '400px',
         maxHeight: '400px',
         '&::-webkit-scrollbar': {
