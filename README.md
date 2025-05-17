@@ -2,7 +2,7 @@
 
 Built with love for a SWE interview. <3 :) 
 
-It's hosted at [Boop for Finni](boop-for-finni.web.app)
+It's hosted at boop-for-finni.web.app
 
 ## Tech Stack
 
