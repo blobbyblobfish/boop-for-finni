@@ -1,40 +1,32 @@
 import './App.css';
-import { useEffect, useState } from 'react'
 import { Auth } from './components/auth.js'
-import { PatientTable } from './components/table.js'
-import { db } from './firebase-config.js'
-import { getDocs, collection } from 'firebase/firestore'
+import { PatientsTable } from './components/table.js'
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+import { ModalsProvider } from '@mantine/modals'
+
+
+const queryClient = new QueryClient()
 
 function App() {
 
-  const [patientList, setPatientList] = useState([])
-
-  const patientsCollectionRef = collection(db, "patients")
-
-  useEffect(() => {
-    const getPatientsList = async () => {
-      try {
-        const patientData = await getDocs(patientsCollectionRef)
-
-        const filteredPatientData = patientData.docs.map((doc) => ({...doc.data(), id: doc.id}))
-
-        setPatientList(filteredPatientData)
-      } catch (error) {
-        // handle error
-      }
-    }
-
-    getPatientsList()
-  }, [])
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <Auth />
-        <PatientTable patients={patientList}/>
-      </header>
-    </div>
-  );
+    <QueryClientProvider client={queryClient}>
+      <ModalsProvider>
+        <div className="App">
+          <header className="App-header">
+            <h1>Finni Dashboard</h1>
+            {/* <Auth /> */}
+            <div style={{overflowX: "auto", maxWidth: "95%", textAlign: "left"}}>
+              <PatientsTable />
+            </div>
+          </header>
+        </div>
+      </ModalsProvider>
+    </QueryClientProvider>
+  )
 }
 
-export default App;
+export default App
