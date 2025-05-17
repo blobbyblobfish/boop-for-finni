@@ -17,8 +17,8 @@ function App() {
       <ModalsProvider>
         <div className="App">
           <header className="App-header">
-            <h1>Finni Database</h1>
-            <Auth />
+            <h1>Finni Dashboard</h1>
+            {/* <Auth /> */}
             <div style={{overflowX: "auto", maxWidth: "95%", textAlign: "left"}}>
               <PatientsTable />
             </div>

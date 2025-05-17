@@ -59,7 +59,6 @@ export const PatientsTable = () => {
     })
 
 // CREATE THE TABLE
-
   const statuses = [
     {label: 'Inquiry', value: "Inquiry"},
     {label: 'Active', value: "Active"},
@@ -214,6 +213,21 @@ export const PatientsTable = () => {
     enableRowActions: true,
     positionActionsColumn: 'last',
     getRowId: (row) => row.id,
+    mantineTableBodyCellProps: ({ row, column }) => {
+      const rowId = row?.id
+      const columnId = column?.id
+
+      const editedValue = editedPatients?.[rowId]?.[columnId]
+      const originalValue = row.original?.[columnId]
+
+      const isEdited = editedValue !== undefined && editedValue !== originalValue
+
+      return {
+        style: {
+          color: isEdited ? 'red' : undefined,
+        },
+      }
+    },
     mantineToolbarAlertBannerProps: isLoadingPatientsError
       ? {
           color: 'red',
