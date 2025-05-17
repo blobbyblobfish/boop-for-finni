@@ -1,5 +1,5 @@
 import { Button, TextField, Alert } from '@mui/material'
-import { auth } from '../firebase-config'
+import { auth } from '../firebase'
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth'
 import { useState } from "react"
 

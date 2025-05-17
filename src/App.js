@@ -1,5 +1,5 @@
 import './App.css';
-import { Auth } from './components/auth.js'
+// import { Auth } from './components/auth.js'
 import { PatientsTable } from './components/table.js'
 import {
   QueryClient,
@@ -19,7 +19,7 @@ function App() {
           <header className="App-header">
             <h1>Finni Dashboard</h1>
             {/* <Auth /> */}
-            <div style={{overflowX: "auto", maxWidth: "95%", textAlign: "left"}}>
+            <div style={{overflowX: "auto", maxWidth: "99%", textAlign: "left"}}>
               <PatientsTable />
             </div>
           </header>

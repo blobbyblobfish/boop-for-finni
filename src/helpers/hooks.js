@@ -3,7 +3,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { db } from '../firebase-config.js'
+import { db } from '../firebase.js'
 import { doc } from 'firebase/firestore'
 import { getDocs, addDoc, deleteDoc, writeBatch, collection } from 'firebase/firestore'
 
