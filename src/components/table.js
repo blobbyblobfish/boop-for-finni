@@ -236,7 +236,17 @@ export const PatientsTable = () => {
       : undefined,
     mantineTableContainerProps: {
       sx: {
-        minHeight: '500px',
+        overflowX: 'scroll',
+        overflowY: 'scroll',
+        minHeight: '400px',
+        maxHeight: '400px',
+        '&::-webkit-scrollbar': {
+          height: '12px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: '#ccc',
+          borderRadius: '6px',
+        },
       },
     },
     onCreatingRowCancel: () => setValidationErrors({}),
