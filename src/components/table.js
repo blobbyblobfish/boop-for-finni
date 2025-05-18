@@ -2,18 +2,21 @@ import { useMemo, useState } from 'react'
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table'
 import { ActionIcon, Button, Flex, Text, Tooltip, Modal } from '@mantine/core'
 import { modals } from '@mantine/modals'
+import { notifications } from '@mantine/notifications'
 import { IconTrash } from '@tabler/icons-react'
 import { useCreatePatient, useGetPatients, useUpdatePatients, useDeletePatient } from '../lib/hooks'
-import { validateRequired, validatePatient } from '../lib/validation'
+import { validateRequired, validatePatient } from '../lib/validators'
 
 export const PatientsTable = () => {
   
   // declare state and query variables
   const [validationErrors, setValidationErrors] = useState([])
 
-  const [editedCells, setEditedCells] = useState([])
+  const [editedCells, setEditedCells] = useState([]) // to allow edited cells to be colored differently
 
   const [editedPatients, setEditedPatients] = useState({})
+
+  // const [newPatient, setNewPatient] = useState({}) // to validate new patient has required fields
 
   const { mutateAsync: createPatient, isLoading: isCreatingPatient } = useCreatePatient()
 
@@ -32,10 +35,18 @@ export const PatientsTable = () => {
   const handleCreatePatient = async ({ values, exitCreatingMode }) => {
     const newValidationErrors = validatePatient(values)
 
+    console.log("in handle create patient")
+
     if (Object.values(newValidationErrors).some((error) => !!error)) {
       setValidationErrors(newValidationErrors)
 
-      return
+      notifications.show({
+        title: 'Missing fields',
+        message: 'First name, last name, dob, and status are required',
+        color: 'red'
+      })
+      
+      return 
     }
     setValidationErrors({})
     await createPatient(values)
@@ -43,6 +54,7 @@ export const PatientsTable = () => {
   }
 
   const handleSavePatients = async () => {
+
     if (Object.values(validationErrors).some((error) => !!error)) return
     await updatePatients(Object.values(editedPatients))
     setEditedPatients({})
