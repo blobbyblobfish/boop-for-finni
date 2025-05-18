@@ -81,6 +81,8 @@ export const PatientsTable = () => {
     {label: 'Churned', value: "Churned"},
   ]
 
+  const validateRequiredMessage = "Required"
+
   const columns = useMemo(
     () => [
       {
@@ -97,7 +99,7 @@ export const PatientsTable = () => {
           error: validationErrors?.firstName,
           onBlur: (event) => {
             const validationError = !validateRequired(event.currentTarget.value)
-              ? 'Required'
+              ? validateRequiredMessage
               : undefined
             setValidationErrors({
               ...validationErrors,
@@ -153,7 +155,7 @@ export const PatientsTable = () => {
           error: validationErrors?.lastName,
           onBlur: (event) => {
             const validationError = !validateRequired(event.currentTarget.value)
-              ? 'Last Name is required'
+              ? validateRequiredMessage
               : undefined
               setValidationErrors({
                 ...validationErrors,
@@ -187,7 +189,7 @@ export const PatientsTable = () => {
           error: validationErrors?.dob,
           onBlur: (event) => {
             const validationError = !validateRequired(event.currentTarget.value)
-              ? 'Required'
+              ? validateRequiredMessage
               : undefined
             setValidationErrors({
               ...validationErrors,
@@ -245,7 +247,7 @@ export const PatientsTable = () => {
           error: validationErrors?.status,
           onChange: (event) => {
             const validationError = !validateRequired(event)
-              ? 'Required'
+              ? validateRequiredMessage
               : undefined
             setValidationErrors({
               ...validationErrors,
