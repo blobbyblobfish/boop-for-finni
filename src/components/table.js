@@ -70,7 +70,6 @@ export const PatientsTable = () => {
       labels: { confirm: 'Delete', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
       onConfirm: () => {
-        console.log("ON CONFIRM FOR DELTE")
         deletePatient(row.original)
       },
     })
@@ -79,7 +78,7 @@ export const PatientsTable = () => {
       const rowId = row?.id
       const column = cell.column.id
       const update = event.target?.value
-      const originalRow = row?.original || {}
+      const originalRow = row?.original || {id: rowId}
       const prevRow = prev[rowId] || originalRow
 
       const edits = {

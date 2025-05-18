@@ -13,7 +13,7 @@ const patientsCollectionRef = collection(db, "patients")
 // CREATE
 const addPatient = async (newPatient) => {
     try {
-      const docRef = await addDoc(collection(db, 'patients'), newPatient)
+      const docRef = await addDoc(patientsCollectionRef, newPatient)
       return docRef.id
     } catch (error) {
       throw error
@@ -61,8 +61,8 @@ const updatePatients = async (editedPatients) => {
     const batch = writeBatch(db)
     
     editedPatients?.forEach((patient) => {
-        const docRef = doc(db, 'patients', patient.id)
-        batch.update(docRef, patient)
+      const docRef = doc(db, 'patients', patient.id)
+      batch.update(docRef, patient)
     })
 
     try {
@@ -97,9 +97,9 @@ export function useUpdatePatients() {
 }
 
 // DELETE
-const deletePatient = async (patient) => {
+const deletePatient = async (patientId) => {
   try {
-    const docRef = doc(db, 'patients', patient.id)
+    const docRef = doc(db, 'patients', patientId)
     await deleteDoc(docRef)
   } catch (error) {
     throw error
