@@ -45,10 +45,10 @@ export function useGetPatients() {
 
 
 // UPDATE
-const updatePatients = async (patientsToUpdate) => {
+const updatePatients = async (editedPatients) => {
     const batch = writeBatch(db)
     
-    patientsToUpdate?.forEach((patient) => {
+    editedPatients?.forEach((patient) => {
         const docRef = doc(db, 'patients', patient.id)
         batch.update(docRef, patient)
     })

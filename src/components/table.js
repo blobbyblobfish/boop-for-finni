@@ -11,6 +11,8 @@ export const PatientsTable = () => {
   // declare state and query variables
   const [validationErrors, setValidationErrors] = useState([])
 
+  const [editedCells, setEditedCells] = useState([])
+
   const [editedPatients, setEditedPatients] = useState({})
 
   const { mutateAsync: createPatient, isLoading: isCreatingPatient } = useCreatePatient()
@@ -44,6 +46,7 @@ export const PatientsTable = () => {
     if (Object.values(validationErrors).some((error) => !!error)) return
     await updatePatients(Object.values(editedPatients))
     setEditedPatients({})
+    setEditedCells([])
   }
 
   const openDeleteConfirmModal = (row) =>
@@ -94,6 +97,7 @@ export const PatientsTable = () => {
                 ...row.original, firstName: event.currentTarget.value
                 } 
             })
+            setEditedCells(editedCells => [...editedCells, cell.id])
           },
         }),
       },
@@ -105,6 +109,7 @@ export const PatientsTable = () => {
             setEditedPatients({ ...editedPatients, [row.id]: {
                 ...row.original, middleName: event.currentTarget.value
             }})
+            setEditedCells(editedCells => [...editedCells, cell.id])
           },
         }),
       },
@@ -125,6 +130,7 @@ export const PatientsTable = () => {
             setEditedPatients({ ...editedPatients, [row.id]: {
                 ...row.original, lastName: event.currentTarget.value
             }})
+            setEditedCells(editedCells => [...editedCells, cell.id])
           },
         }),
       },
@@ -147,6 +153,7 @@ export const PatientsTable = () => {
             setEditedPatients({ ...editedPatients, [row.id]: {
                 ...row.original, dob: event.currentTarget.value
             }})
+            setEditedCells(editedCells => [...editedCells, cell.id])
           },
         }),
       },
@@ -158,6 +165,7 @@ export const PatientsTable = () => {
             setEditedPatients({ ...editedPatients, [row.id]: {
                 ...row.original, address: event.currentTarget.value
             }})
+            setEditedCells(editedCells => [...editedCells, cell.id])
           },
         }),
       },
@@ -181,6 +189,7 @@ export const PatientsTable = () => {
             setEditedPatients({ ...editedPatients, [row.id]: {
                 ...row.original, status: event
             }})
+            setEditedCells(editedCells => [...editedCells, cell.id])
           },
         }),
       },
@@ -207,17 +216,14 @@ export const PatientsTable = () => {
       },
     },
     mantineTableBodyCellProps: ({ row, column }) => {
-      const rowId = row?.id
-      const columnId = column?.id
+      const cellId = row?.id + '_' + column?.id
 
-      const editedValue = editedPatients?.[rowId]?.[columnId]
-      const originalValue = row.original?.[columnId]
-
-      const isEdited = editedValue !== undefined && editedValue !== originalValue
+      const isEdited = editedCells.includes(cellId)
 
       return {
         style: {
-          color: isEdited ? 'orange' : undefined,
+          color: isEdited ? 'orange' : 'black',
+          fontWeight: isEdited ? 'bold' : 'normal'
         },
       }
     },
