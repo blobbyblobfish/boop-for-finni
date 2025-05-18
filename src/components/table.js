@@ -217,7 +217,7 @@ export const PatientsTable = () => {
 
       return {
         style: {
-          color: isEdited ? 'red' : undefined,
+          color: isEdited ? 'orange' : undefined,
         },
       }
     },
