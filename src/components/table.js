@@ -61,7 +61,7 @@ export const PatientsTable = () => {
 
   const openDeleteConfirmModal = (row) =>
     modals.openConfirmModal({
-      title: 'Are you sure you want to delete this Patient?',
+      title: 'Confirm Delete',
       children: (
         <Text>
           Are you sure you want to delete {row.original.firstName}{' '}
