@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table'
-import { ActionIcon, Button, Flex, Text, Tooltip, Modal } from '@mantine/core'
+import { ActionIcon, Button, Flex, Text, Tooltip } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
 import { IconTrash } from '@tabler/icons-react'
@@ -69,7 +69,10 @@ export const PatientsTable = () => {
       ),
       labels: { confirm: 'Delete', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
-      onConfirm: () => deletePatient(row.original),
+      onConfirm: () => {
+        console.log("ON CONFIRM FOR DELTE")
+        deletePatient(row.original)
+      },
     })
 
     const makeEdits = (prev, row, cell, event) => {
@@ -78,8 +81,6 @@ export const PatientsTable = () => {
       const update = event.target?.value
       const originalRow = row?.original || {}
       const prevRow = prev[rowId] || originalRow
-
-      console.log({rowId, column, update, originalRow, prevRow})
 
       const edits = {
         ...prev,

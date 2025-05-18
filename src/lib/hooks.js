@@ -6,13 +6,18 @@ import {
 import { db } from '../firebase.js'
 import { doc } from 'firebase/firestore'
 import { getDocs, addDoc, deleteDoc, writeBatch, collection } from 'firebase/firestore'
+import { notifications } from '@mantine/notifications'
 
 const patientsCollectionRef = collection(db, "patients")
 
 // CREATE
 const addPatient = async (newPatient) => {
-    const docRef = await addDoc(collection(db, 'patients'), newPatient)
-    return docRef.id
+    try {
+      const docRef = await addDoc(collection(db, 'patients'), newPatient)
+      return docRef.id
+    } catch (error) {
+      throw error
+    }
 }
 
 export function useCreatePatient() {
@@ -25,7 +30,14 @@ export function useCreatePatient() {
       ])
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }), //refetch Patients after mutation
-    onError: () => { return "Error" }
+    onError: () => { 
+      notifications.show({
+        title: "Oops", 
+        message: "Error creating new row",
+        color: "red"
+      })
+      return 
+    }
   })
 }
 
@@ -53,7 +65,11 @@ const updatePatients = async (editedPatients) => {
         batch.update(docRef, patient)
     })
 
-    await batch.commit()
+    try {
+      await batch.commit()
+    } catch (error) {
+      throw error
+    }
 }
 
 export function useUpdatePatients() {
@@ -69,14 +85,25 @@ export function useUpdatePatients() {
       )
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }),
-    onError: () => { return "Error" }
+    onError: () => { 
+      notifications.show({
+        title: "Oops", 
+        message: "Error updating cell(s)",
+        color: "red"
+      })
+      return 
+    }
   })
 }
 
 // DELETE
 const deletePatient = async (patient) => {
+  try {
     const docRef = doc(db, 'patients', patient.id)
     await deleteDoc(docRef)
+  } catch (error) {
+    throw error
+  }
 }
 
 export function useDeletePatient() {
@@ -90,6 +117,13 @@ export function useDeletePatient() {
       )
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }), 
-    onError: () => { return "Error" }
+    onError: () => { 
+      notifications.show({
+        title: "Oops", 
+        message: "Error deleting row",
+        color: "red"
+      })
+      return 
+    }
   })
 }
