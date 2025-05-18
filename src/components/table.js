@@ -33,10 +33,7 @@ export const PatientsTable = () => {
 
   //handlers:
   const handleCreatePatient = async ({ values, exitCreatingMode }) => {
-    console.log("values", values)
     const newValidationErrors = validatePatient(values)
-
-    console.log("validationErrors", newValidationErrors)
 
     if (Object.values(newValidationErrors).some((error) => !!error)) {
       setValidationErrors(newValidationErrors)
