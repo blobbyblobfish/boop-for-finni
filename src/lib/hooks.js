@@ -12,6 +12,7 @@ const patientsCollectionRef = collection(db, "patients")
 
 // CREATE
 const addPatient = async (newPatient) => {
+  console.log(newPatient)
     try {
       const docRef = await addDoc(patientsCollectionRef, newPatient)
       return docRef.id
