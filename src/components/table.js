@@ -52,7 +52,6 @@ export const PatientsTable = () => {
   }
 
   const handleSavePatients = async () => {
-
     if (Object.values(validationErrors).some((error) => !!error)) return
     await updatePatients(Object.values(editedPatients))
     setEditedPatients({})
@@ -72,6 +71,26 @@ export const PatientsTable = () => {
       confirmProps: { color: 'red' },
       onConfirm: () => deletePatient(row.original),
     })
+
+    const makeEdits = (prev, row, cell, event) => {
+      const rowId = row?.id
+      const column = cell.column.id
+      const update = event.target?.value
+      const originalRow = row?.original || {}
+      const prevRow = prev[rowId] || originalRow
+
+      console.log({rowId, column, update, originalRow, prevRow})
+
+      const edits = {
+        ...prev,
+        [rowId]: {
+          ...prevRow,
+          [column]: update
+        }
+      }
+
+      return edits
+    }
 
 // CREATE THE TABLE
   const statuses = [
@@ -106,20 +125,7 @@ export const PatientsTable = () => {
               firstName: validationError,
             })
             setEditedPatients((prev = {}) => {
-              const rowId = row?.id
-              const column = cell.column.id
-              const update = event.target?.value
-              const originalRow = row?.original || {}
-
-              const prevRow = prev[rowId] || originalRow
-
-              return {
-                ...prev,
-                [rowId]: {
-                  ...prevRow,
-                  [column]: update
-                }
-            }})
+              return makeEdits(prev, row, cell, event)})
             setEditedCells((prev = []) => [...new Set([...prev, cell?.id])])
           },
         }),
@@ -130,19 +136,7 @@ export const PatientsTable = () => {
         mantineEditTextInputProps: ({ cell, row }) => ({
           onBlur: (event) => {
             setEditedPatients((prev = {}) => {
-              const rowId = row?.id
-              const column = cell.column.id
-              const update = event.target?.value
-              const originalRow = row?.original || {}
-              const prevRow = prev[rowId] || originalRow
-
-              return {
-                ...prev,
-                [rowId]: {
-                  ...prevRow,
-                  [column]: update
-                }
-            }})
+              return makeEdits(prev, row, cell, event)})
             setEditedCells((prev = []) => [...new Set([...prev, cell?.id])])
           },
         }),
@@ -162,19 +156,9 @@ export const PatientsTable = () => {
                 lastName: validationError,
               }) 
             setEditedPatients((prev = {}) => {
-              const rowId = row?.id
-              const column = cell.column.id
-              const update = event.target?.value
-              const originalRow = row?.original || {}
-              const prevRow = prev[rowId] || originalRow
-
-              return {
-                ...prev,
-                [rowId]: {
-                  ...prevRow,
-                  [column]: update
-                }
-            }})
+              return makeEdits(prev, row, cell, event)
+            }
+          )
             setEditedCells((prev = []) => [...new Set([...prev, cell?.id])])
           },
         }),
@@ -196,19 +180,7 @@ export const PatientsTable = () => {
               dob: validationError,
             })
             setEditedPatients((prev = {}) => {
-              const rowId = row?.id
-              const column = cell.column.id
-              const update = event.target?.value
-              const originalRow = row?.original || {}
-              const prevRow = prev[rowId] || originalRow
-
-              return {
-                ...prev,
-                [rowId]: {
-                  ...prevRow,
-                  [column]: update
-                }
-            }})
+              return makeEdits(prev, row, cell, event)})
             setEditedCells((prev = []) => [...new Set([...prev, cell?.id])])
           },
         }),
@@ -219,19 +191,7 @@ export const PatientsTable = () => {
         mantineEditTextInputProps: ({ cell, row }) => ({
           onBlur: (event) => {
             setEditedPatients((prev = {}) => {
-              const rowId = row?.id
-              const column = cell.column.id
-              const update = event.target?.value
-              const originalRow = row?.original || {}
-              const prevRow = prev[rowId] || originalRow
-
-              return {
-                ...prev,
-                [rowId]: {
-                  ...prevRow,
-                  [column]: update
-                }
-            }})
+              return makeEdits(prev, row, cell, event)})
             setEditedCells((prev = []) => [...new Set([...prev, cell?.id])])
           },
         }),
@@ -254,19 +214,7 @@ export const PatientsTable = () => {
               status: validationError,
             })
             setEditedPatients((prev = {}) => {
-              const rowId = row?.id
-              const column = cell.column.id
-              const update = event.target?.value
-              const originalRow = row?.original || {}
-              const prevRow = prev[rowId] || originalRow
-
-              return {
-                ...prev,
-                [rowId]: {
-                  ...prevRow,
-                  [column]: update
-                }
-            }})
+              return makeEdits(prev, row, cell, event)})
             setEditedCells((prev = []) => [...new Set([...prev, cell?.id])])
           },
         }),
