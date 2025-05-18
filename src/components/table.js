@@ -4,7 +4,7 @@ import { ActionIcon, Button, Flex, Text, Tooltip, Modal } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { IconTrash } from '@tabler/icons-react'
 import { useCreatePatient, useGetPatients, useUpdatePatients, useDeletePatient } from '../lib/hooks'
-import { validateRequired, validatePatient } from '../lib/validation'
+import { validateRequired, validatePatient } from '../lib/validators'
 
 export const PatientsTable = () => {
   
@@ -93,7 +93,9 @@ export const PatientsTable = () => {
               ...validationErrors,
               firstName: validationError,
             })
-            setEditedPatients((prev = {}) => {
+
+            if (event.target.value) {
+              setEditedPatients((prev = {}) => {
               const rowId = row?.id
               const column = cell.column.id
               const update = event.target?.value
@@ -108,6 +110,7 @@ export const PatientsTable = () => {
                   [column]: update
                 }
             }})
+            }
             setEditedCells((prev = []) => [...new Set([...prev, cell?.id])])
           },
         }),
@@ -143,7 +146,7 @@ export const PatientsTable = () => {
           error: validationErrors?.lastName,
           onBlur: (event) => {
             const validationError = !validateRequired(event.currentTarget.value)
-              ? 'Last Name is required'
+              ? 'Required'
               : undefined
               setValidationErrors({
                 ...validationErrors,

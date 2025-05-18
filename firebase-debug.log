@@ -1,0 +1,40 @@
+[debug] [2025-05-18T21:07:59.412Z] ----------------------------------------------------------------------
+[debug] [2025-05-18T21:07:59.413Z] Command:       /Users/Alice/.nvm/versions/node/v22.15.0/bin/node /Users/Alice/.nvm/versions/node/v22.15.0/bin/firebase deploy
+[debug] [2025-05-18T21:07:59.414Z] CLI Version:   14.4.0
+[debug] [2025-05-18T21:07:59.414Z] Platform:      darwin
+[debug] [2025-05-18T21:07:59.414Z] Node Version:  v22.15.0
+[debug] [2025-05-18T21:07:59.414Z] Time:          Sun May 18 2025 17:07:59 GMT-0400 (Eastern Daylight Time)
+[debug] [2025-05-18T21:07:59.414Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-05-18T21:07:59.514Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-05-18T21:07:59.515Z] > authorizing via signed-in user (aywang6@gmail.com)
+[debug] [2025-05-18T21:07:59.515Z] [iam] checking project boop-for-finni for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-05-18T21:07:59.515Z] Checked if tokens are valid: true, expires at: 1747605843763
+[debug] [2025-05-18T21:07:59.515Z] Checked if tokens are valid: true, expires at: 1747605843763
+[debug] [2025-05-18T21:07:59.516Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/boop-for-finni:testIamPermissions [none]
+[debug] [2025-05-18T21:07:59.516Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/boop-for-finni:testIamPermissions x-goog-quota-user=projects/boop-for-finni
+[debug] [2025-05-18T21:07:59.516Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/boop-for-finni:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-05-18T21:07:59.692Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/boop-for-finni:testIamPermissions 200
+[debug] [2025-05-18T21:07:59.692Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/boop-for-finni:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-05-18T21:07:59.692Z] Checked if tokens are valid: true, expires at: 1747605843763
+[debug] [2025-05-18T21:07:59.692Z] Checked if tokens are valid: true, expires at: 1747605843763
+[debug] [2025-05-18T21:07:59.692Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/boop-for-finni [none]
+[debug] [2025-05-18T21:08:00.036Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/boop-for-finni 200
+[debug] [2025-05-18T21:08:00.037Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/boop-for-finni {"projectId":"boop-for-finni","projectNumber":"386320044980","displayName":"Boop-for-finni","name":"projects/boop-for-finni","resources":{"hostingSite":"boop-for-finni"},"state":"ACTIVE","etag":"1_c9870223-c01e-4bbb-87fe-64a6ffe026d1"}
+[info] 
+[info] === Deploying to 'boop-for-finni'...
+[info] 
+[info] i  deploying firestore, hosting 
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2025-05-18T21:08:00.042Z] Checked if tokens are valid: true, expires at: 1747605843763
+[debug] [2025-05-18T21:08:00.042Z] Checked if tokens are valid: true, expires at: 1747605843763
+[debug] [2025-05-18T21:08:00.042Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/boop-for-finni:test [none]
+[debug] [2025-05-18T21:08:00.042Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/boop-for-finni:test [omitted]
+[debug] [2025-05-18T21:08:00.237Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/boop-for-finni:test 200
+[debug] [2025-05-18T21:08:00.237Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/boop-for-finni:test {}
+[info] ✔  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2025-05-18T21:08:00.241Z] Checked if tokens are valid: true, expires at: 1747605843763
+[debug] [2025-05-18T21:08:00.241Z] Checked if tokens are valid: true, expires at: 1747605843763
+[debug] [2025-05-18T21:08:00.241Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/boop-for-finni/versions [none]
+[debug] [2025-05-18T21:08:00.241Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/boop-for-finni/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
