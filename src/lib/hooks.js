@@ -43,8 +43,12 @@ export function useCreatePatient() {
 
 // READ
 const fetchPatients = async () => {
-    const patientData = await getDocs(patientsCollectionRef)
-    return patientData.docs.map((doc) => ({...doc.data(), id: doc.id}))
+    try {
+      const patientData = await getDocs(patientsCollectionRef)
+      return patientData.docs.map((doc) => ({...doc.data(), id: doc.id}))
+    } catch (error) {
+      throw error
+    }
 }
 
 export function useGetPatients() {

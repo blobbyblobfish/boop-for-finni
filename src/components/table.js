@@ -46,16 +46,24 @@ export const PatientsTable = () => {
 
       return 
     }
+    try {
+      await createPatient(values)
+    } catch (error) {
+      throw error
+    }
     setValidationErrors({})
-    await createPatient(values)
     exitCreatingMode()
   }
 
   const handleSavePatients = async () => {
     if (Object.values(validationErrors).some((error) => !!error)) return
-    await updatePatients(Object.values(editedPatients))
-    setEditedPatients({})
-    setEditedCells([])
+    try {
+      await updatePatients(Object.values(editedPatients))
+      setEditedPatients({})
+      setEditedCells([])
+    } catch (error) {
+      throw error
+    }
   }
 
   const openDeleteConfirmModal = (row) =>
