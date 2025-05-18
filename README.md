@@ -11,3 +11,5 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 Libraries used included Mantine React Table and React Query.
 
 The backend is handled by Firebase / Firestore.
+
+Tested on Chrome, Safari, and Firefox. Hopefully I caught all of the bugs. *:o melts*
