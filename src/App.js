@@ -18,7 +18,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <MantineProvider> 
           <ModalsProvider>
-            <Notifications position='center'/>
+            <Notifications position='bottom-right'/>
             <div className="App">
               <header className="App-header">
                 <img src="https://cdn.prod.website-files.com/6297d5d89ac9c5b4308579e1/6297d5d89ac9c581808579f2_Hero%20Side%20Image.svg"></img>
