@@ -35,8 +35,6 @@ export const PatientsTable = () => {
   const handleCreatePatient = async ({ values, exitCreatingMode }) => {
     const newValidationErrors = validatePatient(values)
 
-    console.log("in handle create patient")
-
     if (Object.values(newValidationErrors).some((error) => !!error)) {
       setValidationErrors(newValidationErrors)
 
@@ -45,7 +43,7 @@ export const PatientsTable = () => {
         message: 'First name, last name, dob, and status are required',
         color: 'red'
       })
-      
+
       return 
     }
     setValidationErrors({})
