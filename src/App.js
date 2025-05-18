@@ -1,4 +1,4 @@
-import './App.css';
+import './App.css'
 // import { Auth } from './components/auth.js'
 import { PatientsTable } from './components/table.js'
 import {

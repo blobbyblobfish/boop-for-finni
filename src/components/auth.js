@@ -22,7 +22,10 @@ export const Auth = () => {
         try {
             await signOut(auth)
         } catch (error) {
-            
+            <Alert severity="error">
+                There was an error. Please try again. 
+                {error}
+            </Alert>
         }
     }
 

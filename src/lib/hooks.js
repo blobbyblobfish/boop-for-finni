@@ -2,7 +2,7 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-} from '@tanstack/react-query';
+} from '@tanstack/react-query'
 import { db } from '../firebase.js'
 import { doc } from 'firebase/firestore'
 import { getDocs, addDoc, deleteDoc, writeBatch, collection } from 'firebase/firestore'
@@ -16,16 +16,17 @@ const addPatient = async (newPatient) => {
 }
 
 export function useCreatePatient() {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: addPatient,
     onMutate: (newPatientInfo) => { //client side optimistic update
       queryClient.setQueryData(['Patients'], (prevPatients) => [
         ...prevPatients, { ...newPatientInfo },
-      ]);
+      ])
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }), //refetch Patients after mutation
-  });
+    onError: () => { return "Error" }
+  })
 }
 
 // READ
@@ -39,7 +40,7 @@ export function useGetPatients() {
     queryKey: ['Patients'],
     queryFn: fetchPatients,
     refetchOnWindowFocus: false,
-  });
+  })
 }
 
 
@@ -56,22 +57,20 @@ const updatePatients = async (patientsToUpdate) => {
 }
 
 export function useUpdatePatients() {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: updatePatients,
     onMutate: (newPatients) => { 
       queryClient.setQueryData(['Patients'], (prevPatients) =>
         prevPatients?.map((Patient) => {
-          const newPatient = newPatients.find((u) => u.id === Patient.id);
-          return newPatient ? newPatient : Patient;
+          const newPatient = newPatients.find((u) => u.id === Patient.id)
+          return newPatient ? newPatient : Patient
         }),
-      );
+      )
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }),
-    onError: () => {
-        console.log("ERROR UPDATING PATIENTS")
-    }
-  });
+    onError: () => { return "Error" }
+  })
 }
 
 // DELETE
@@ -81,14 +80,16 @@ const deletePatient = async (patient) => {
 }
 
 export function useDeletePatient() {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: deletePatient,
     onMutate: (PatientId) => {
       queryClient.setQueryData(['Patients'], (prevPatients) =>
         prevPatients?.filter((Patient) => Patient.id !== PatientId),
-      );
+      )
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }), 
-  });
+    onError: () => { return "Error" }
+  })
 }
