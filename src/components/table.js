@@ -93,11 +93,22 @@ export const PatientsTable = () => {
               ...validationErrors,
               firstName: validationError,
             })
-            setEditedPatients({ ...editedPatients, [row.id]: {
-                ...row.original, firstName: event.currentTarget.value
-                } 
-            })
-            setEditedCells(editedCells => [...editedCells, cell.id])
+            setEditedPatients((prev = {}) => {
+              const rowId = row?.id
+              const column = cell.column.id
+              const update = event.target?.value
+              const originalRow = row?.original || {}
+
+              const prevRow = prev[rowId] || originalRow
+
+              return {
+                ...prev,
+                [rowId]: {
+                  ...prevRow,
+                  [column]: update
+                }
+            }})
+            setEditedCells((prev = []) => [...new Set([...prev, cell?.id])])
           },
         }),
       },
@@ -106,10 +117,21 @@ export const PatientsTable = () => {
         header: 'Middle Name',
         mantineEditTextInputProps: ({ cell, row }) => ({
           onBlur: (event) => {
-            setEditedPatients({ ...editedPatients, [row.id]: {
-                ...row.original, middleName: event.currentTarget.value
+            setEditedPatients((prev = {}) => {
+              const rowId = row?.id
+              const column = cell.column.id
+              const update = event.target?.value
+              const originalRow = row?.original || {}
+              const prevRow = prev[rowId] || originalRow
+
+              return {
+                ...prev,
+                [rowId]: {
+                  ...prevRow,
+                  [column]: update
+                }
             }})
-            setEditedCells(editedCells => [...editedCells, cell.id])
+            setEditedCells((prev = []) => [...new Set([...prev, cell?.id])])
           },
         }),
       },
@@ -127,10 +149,21 @@ export const PatientsTable = () => {
                 ...validationErrors,
                 lastName: validationError,
               }) 
-            setEditedPatients({ ...editedPatients, [row.id]: {
-                ...row.original, lastName: event.currentTarget.value
+            setEditedPatients((prev = {}) => {
+              const rowId = row?.id
+              const column = cell.column.id
+              const update = event.target?.value
+              const originalRow = row?.original || {}
+              const prevRow = prev[rowId] || originalRow
+
+              return {
+                ...prev,
+                [rowId]: {
+                  ...prevRow,
+                  [column]: update
+                }
             }})
-            setEditedCells(editedCells => [...editedCells, cell.id])
+            setEditedCells((prev = []) => [...new Set([...prev, cell?.id])])
           },
         }),
       },
@@ -150,10 +183,21 @@ export const PatientsTable = () => {
               ...validationErrors,
               dob: validationError,
             })
-            setEditedPatients({ ...editedPatients, [row.id]: {
-                ...row.original, dob: event.currentTarget.value
+            setEditedPatients((prev = {}) => {
+              const rowId = row?.id
+              const column = cell.column.id
+              const update = event.target?.value
+              const originalRow = row?.original || {}
+              const prevRow = prev[rowId] || originalRow
+
+              return {
+                ...prev,
+                [rowId]: {
+                  ...prevRow,
+                  [column]: update
+                }
             }})
-            setEditedCells(editedCells => [...editedCells, cell.id])
+            setEditedCells((prev = []) => [...new Set([...prev, cell?.id])])
           },
         }),
       },
@@ -162,10 +206,21 @@ export const PatientsTable = () => {
         header: 'Address',
         mantineEditTextInputProps: ({ cell, row }) => ({
           onBlur: (event) => {
-            setEditedPatients({ ...editedPatients, [row.id]: {
-                ...row.original, address: event.currentTarget.value
+            setEditedPatients((prev = {}) => {
+              const rowId = row?.id
+              const column = cell.column.id
+              const update = event.target?.value
+              const originalRow = row?.original || {}
+              const prevRow = prev[rowId] || originalRow
+
+              return {
+                ...prev,
+                [rowId]: {
+                  ...prevRow,
+                  [column]: update
+                }
             }})
-            setEditedCells(editedCells => [...editedCells, cell.id])
+            setEditedCells((prev = []) => [...new Set([...prev, cell?.id])])
           },
         }),
       },
@@ -186,10 +241,21 @@ export const PatientsTable = () => {
               ...validationErrors,
               status: validationError,
             })
-            setEditedPatients({ ...editedPatients, [row.id]: {
-                ...row.original, status: event
+            setEditedPatients((prev = {}) => {
+              const rowId = row?.id
+              const column = cell.column.id
+              const update = event.target?.value
+              const originalRow = row?.original || {}
+              const prevRow = prev[rowId] || originalRow
+
+              return {
+                ...prev,
+                [rowId]: {
+                  ...prevRow,
+                  [column]: update
+                }
             }})
-            setEditedCells(editedCells => [...editedCells, cell.id])
+            setEditedCells((prev = []) => [...new Set([...prev, cell?.id])])
           },
         }),
       },
