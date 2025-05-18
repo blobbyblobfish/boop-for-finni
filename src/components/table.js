@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table'
-import { ActionIcon, Button, Flex, Text, Tooltip, Modal } from '@mantine/core'
+import { ActionIcon, Button, Flex, Text, Tooltip } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
 import { IconTrash } from '@tabler/icons-react'
@@ -33,7 +33,10 @@ export const PatientsTable = () => {
 
   //handlers:
   const handleCreatePatient = async ({ values, exitCreatingMode }) => {
+    console.log("values", values)
     const newValidationErrors = validatePatient(values)
+
+    console.log("validationErrors", newValidationErrors)
 
     if (Object.values(newValidationErrors).some((error) => !!error)) {
       setValidationErrors(newValidationErrors)
@@ -69,17 +72,17 @@ export const PatientsTable = () => {
       ),
       labels: { confirm: 'Delete', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
-      onConfirm: () => deletePatient(row.original),
+      onConfirm: () => {
+        deletePatient(row.original)
+      },
     })
 
     const makeEdits = (prev, row, cell, event) => {
       const rowId = row?.id
       const column = cell.column.id
       const update = event.target?.value
-      const originalRow = row?.original || {}
+      const originalRow = row?.original || {id: rowId}
       const prevRow = prev[rowId] || originalRow
-
-      console.log({rowId, column, update, originalRow, prevRow})
 
       const edits = {
         ...prev,
