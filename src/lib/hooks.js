@@ -12,7 +12,6 @@ const patientsCollectionRef = collection(db, "patients")
 
 // CREATE
 const addPatient = async (newPatient) => {
-  console.log(newPatient)
     try {
       const docRef = await addDoc(patientsCollectionRef, newPatient)
       return docRef.id
@@ -98,9 +97,9 @@ export function useUpdatePatients() {
 }
 
 // DELETE
-const deletePatient = async (patientId) => {
+const deletePatient = async (patient) => {
   try {
-    const docRef = doc(db, 'patients', patientId)
+    const docRef = doc(db, 'patients', patient.id)
     await deleteDoc(docRef)
   } catch (error) {
     throw error
