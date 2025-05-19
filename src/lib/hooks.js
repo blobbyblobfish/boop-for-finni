@@ -12,12 +12,12 @@ const patientsCollectionRef = collection(db, "patients")
 
 // CREATE
 const addPatient = async (newPatient) => {
-    try {
-      const docRef = await addDoc(patientsCollectionRef, newPatient)
-      return docRef.id
-    } catch (error) {
-      throw error
-    }
+  try {
+    const docRef = await addDoc(patientsCollectionRef, newPatient)
+    return docRef.id
+  } catch (error) {
+    throw error
+  }
 }
 
 export function useCreatePatient() {
@@ -25,9 +25,14 @@ export function useCreatePatient() {
   return useMutation({
     mutationFn: addPatient,
     onMutate: (newPatientInfo) => { //client side optimistic update
-      queryClient.setQueryData(['Patients'], (prevPatients) => [
+      queryClient.setQueryData(['Patients'], (prevPatients = []) => [
         ...prevPatients, { ...newPatientInfo },
       ])
+      notifications.show({
+        title: "Success", 
+        message: "Patient created",
+        color: "blue"
+      })
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['Patients'] }), //refetch Patients after mutation
     onError: () => { 
@@ -36,7 +41,6 @@ export function useCreatePatient() {
         message: "Error creating new row",
         color: "red"
       })
-      return 
     }
   })
 }
@@ -95,7 +99,6 @@ export function useUpdatePatients() {
         message: "Error updating cell(s)",
         color: "red"
       })
-      return 
     }
   })
 }
@@ -127,7 +130,6 @@ export function useDeletePatient() {
         message: "Error deleting row",
         color: "red"
       })
-      return 
     }
   })
 }
